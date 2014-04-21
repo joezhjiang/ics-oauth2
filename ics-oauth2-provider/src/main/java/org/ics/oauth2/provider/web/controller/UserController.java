@@ -36,7 +36,7 @@ public class UserController {
 		logger.info(userId);
 		User user = new User();
 		user.setId(userId);
-		user.setName("姓名");
+		//user.setName("姓名");
 		user.setGender(Gender.MALE);
 		user.setBorthday(Calendar.getInstance().getTime());
 		// to do

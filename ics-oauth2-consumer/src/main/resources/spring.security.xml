@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:oauth="http://spring-security-oauth.codehaus.org/3.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd
+    http://spring-security-oauth.codehaus.org/3.0
+    http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
+
+	<http auto-config='true'>
+		<intercept-url pattern="/admin.jsp" access="ROLE_ADMIN" />
+		<intercept-url pattern="/**" access="ROLE_USER" />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="admin" password="admin" authorities="ROLE_USER, ROLE_ADMIN" />
+				<user name="user" password="user" authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+
+	<oauth:consumer resource-details-service-ref="resourceDetails" oauth-failure-page="oauthError.jsp">
+		<oauth:url pattern="/provider/**" resources="providerPhotos"/>
+	</oauth:consumer>
+
+	<oauth:resource-details-service id="resourceDetails">
+		<oauth:resource id="providerPhotos" key="ics-oauth2-consumer"
+			secret="123456" request-token-url="http://localhost:8081/provider/oauth/request_token"
+			user-authorization-url="http://localhost:8081/provider/oauth/confirm_access"
+			access-token-url="http://localhost:8081/provider/oauth/access_token" />
+	</oauth:resource-details-service>
+
+</beans:beans>
